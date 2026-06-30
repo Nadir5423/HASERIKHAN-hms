@@ -1,0 +1,30 @@
+@page "{id:int}"
+@model HMS.Pages.Admin.Rooms.DeleteModel
+@{
+    ViewData["Title"] = "Delete Room";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 text-center">
+        <div class="card card-enterprise shadow-sm animate-enter delay-100">
+            <div class="card-body p-5">
+                <i class="fa-solid fa-trash-can fa-4x mb-4" style="color: var(--clr-danger);"></i>
+                <h3 class="text-headline mb-3">Delete Room?</h3>
+                <p class="text-body text-muted mb-4">
+                    Are you sure you want to delete <strong style="color: var(--clr-primary-900);">Room @Model.Room.RoomNumber</strong> (@Model.Room.Category?.CategoryName)? 
+                    This action is permanent and cannot be undone.
+                </p>
+
+                <form method="post">
+                    <input type="hidden" asp-for="Room.RoomId" />
+                    
+                    <div class="d-flex justify-content-center gap-3">
+                        <a asp-page="./Index" class="btn btn-outline-secondary px-4"><i class="fa-solid fa-arrow-left me-1"></i> Cancel</a>
+                        <button type="submit" class="btn btn-danger px-4"><i class="fa-solid fa-trash-can me-1"></i> Confirm Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,35 @@
+## Visual Studio / .NET Core gitignore
+[Db]
+*.db
+*.s3db
+*.sqlite
+*.db-journal
+*.db-shm
+*.db-wal
+
+## Build outputs
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]ppHost/
+
+## User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Visual Studio Cache / Tooling files
+.vs/
+.idea/
+.vscode/
+*.DotSettings.user
+
+## OS-specific files
+.DS_Store
+Thumbs.db
+desktop.ini

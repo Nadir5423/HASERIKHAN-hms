@@ -1,0 +1,91 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Welcome to HASIRKAHN";
+    var userName = HttpContext.Session.GetString("UserName");
+    var userType = HttpContext.Session.GetString("UserType");
+}
+
+<div class="row align-items-center py-5 min-vh-75">
+    <div class="col-lg-6 mb-5 mb-lg-0 text-center text-lg-start animate-enter delay-100">
+        <h1 class="display-3 font-weight-bold mb-3" style="color: var(--clr-primary-900); font-family: var(--font-family-base);">
+            Luxury Awaits You
+        </h1>
+        <p class="fs-5 text-muted mb-4 lh-lg">
+            Experience the next level of hospitality at HASRIKAHN. Unwind in our state-of-the-art suites, enjoy exceptional customer service, and access modern facilities managed in real time.
+        </p>
+        <div class="d-flex flex-wrap justify-content-center justify-content-lg-start gap-3">
+            @if (userName != null)
+            {
+                if (userType == "Customer")
+                {
+                    <a asp-page="/Customer/Index" class="btn btn-primary px-4 py-2.5">
+                        <i class="fa-solid fa-magnifying-glass me-2"></i>Find Available Rooms
+                    </a>
+                    <a asp-page="/Customer/Index" class="btn btn-outline-secondary px-4 py-2.5">
+                        <i class="fa-solid fa-gauge-high me-2"></i>Go to Dashboard
+                    </a>
+                }
+                else
+                {
+                    <a asp-page="/Admin/Index" class="btn btn-primary px-4 py-2.5">
+                        <i class="fa-solid fa-gauge-high me-2"></i>Admin Dashboard
+                    </a>
+                }
+            }
+            else
+            {
+                <a asp-page="/Customer/Index" class="btn btn-primary px-4 py-2.5">
+                    <i class="fa-solid fa-magnifying-glass me-2"></i>Explore Rooms
+                </a>
+                <a asp-page="/Account/Login" class="btn btn-outline-secondary px-4 py-2.5">
+                    <i class="fa-solid fa-right-to-bracket me-2"></i>Sign In to Book
+                </a>
+            }
+        </div>
+    </div>
+    
+    <div class="col-lg-6 animate-enter delay-200">
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card card-enterprise h-100 p-3 shadow-sm">
+                    <div class="card-body text-center text-md-start">
+                        <i class="fa-solid fa-bed fa-2x mb-3" style="color: var(--clr-primary-500);"></i>
+                        <h5 class="card-title text-headline mb-2" style="font-size: 16px; color: var(--clr-primary-900);">Deluxe Suites</h5>
+                        <p class="text-body text-muted mb-0">Immerse yourself in premium bedding, modern architecture, and scenic views.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card card-enterprise h-100 p-3 shadow-sm">
+                    <div class="card-body text-center text-md-start">
+                        <i class="fa-solid fa-utensils fa-2x mb-3" style="color: var(--clr-primary-500);"></i>
+                        <h5 class="card-title text-headline mb-2" style="font-size: 16px; color: var(--clr-primary-900);">Fine Dining</h5>
+                        <p class="text-body text-muted mb-0">Indulge in culinary masterpieces cooked by world-class chefs.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card card-enterprise h-100 p-3 shadow-sm">
+                    <div class="card-body text-center text-md-start">
+                        <i class="fa-solid fa-spa fa-2x mb-3" style="color: var(--clr-primary-500);"></i>
+                        <h5 class="card-title text-headline mb-2" style="font-size: 16px; color: var(--clr-primary-900);">Wellness</h5>
+                        <p class="text-body text-muted mb-0">Relax and restore your energy with curated body massages and spa treatments.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card card-enterprise h-100 p-3 shadow-sm">
+                    <div class="card-body text-center text-md-start">
+                        <i class="fa-solid fa-wifi fa-2x mb-3" style="color: var(--clr-primary-500);"></i>
+                        <h5 class="card-title text-headline mb-2" style="font-size: 16px; color: var(--clr-primary-900);">Smart Stay</h5>
+                        <p class="text-body text-muted mb-0">High-speed gigabit internet and automated room features at your command.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

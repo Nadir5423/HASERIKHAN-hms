@@ -1,0 +1,86 @@
+@page "/Admin/Services/Index"
+@using HMS.Models.Entities
+@model HMS.Pages.Admin.Services.IndexModel
+@{
+    ViewData["Title"] = "Manage Services";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 animate-enter">
+    <div>
+        <h2 class="text-headline mb-0"><i class="fa-solid fa-concierge-bell me-2" style="color: var(--clr-primary-500);"></i> Services Management</h2>
+        <p class="text-body text-muted mb-0">View and manage additional services for hotel bookings</p>
+    </div>
+    @if (Model.CurrentUserRole == "Admin")
+    {
+        <a asp-page="/Admin/Services/Create" class="btn btn-primary px-3 py-2"><i class="fa-solid fa-plus me-1"></i> Add Service</a>
+    }
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert-enterprise-success mb-3 animate-enter">
+        <i class="fa-solid fa-circle-check"></i>
+        <div>@TempData["SuccessMessage"]</div>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert-enterprise-error mb-3 animate-enter">
+        <i class="fa-solid fa-circle-xmark"></i>
+        <div>@TempData["ErrorMessage"]</div>
+    </div>
+}
+
+<div class="card card-enterprise shadow-sm animate-enter delay-100">
+    <div class="card-body p-4">
+        @if (Model.Services.Count == 0)
+        {
+            <div class="text-center py-5 text-muted">
+                <i class="fa-solid fa-inbox fa-3x mb-3 opacity-25"></i>
+                <p class="mb-0">No services found. Click 'Add Service' to create one.</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table-enterprise">
+                    <thead>
+                        <tr>
+                            <th>Service Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Availability</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var service in Model.Services)
+                        {
+                            <tr>
+                                <td class="fw-bold" style="color: var(--clr-primary-900);">@service.ServiceName</td>
+                                <td>@service.Description</td>
+                                <td class="fw-medium">$@service.Price.ToString("N2")</td>
+                                <td>
+                                    <span class="badge-status @(service.IsAvailable ? "badge-success" : "badge-danger")">
+                                        @(service.IsAvailable ? "Available" : "Unavailable")
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <a asp-page="/Admin/Services/Edit" asp-route-id="@service.ServiceId" class="btn btn-outline-secondary py-1 px-3 me-2">
+                                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                                    </a>
+                                    @if (Model.CurrentUserRole == "Admin")
+                                    {
+                                        <a asp-page="/Admin/Services/Delete" asp-route-id="@service.ServiceId" class="btn btn-danger py-1 px-3">
+                                            <i class="fa-solid fa-trash-can"></i> Delete
+                                        </a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,45 @@
+@page "{id:int}"
+@model HMS.Pages.Admin.Staff.DeleteModel
+@{
+    ViewData["Title"] = "Delete Staff Member";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card card-enterprise shadow-sm animate-enter delay-100">
+            <div class="card-body p-5 text-center">
+                <div class="mb-4">
+                    <div class="mx-auto mb-3" style="width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: var(--clr-primary-50);">
+                        <i class="fa-solid fa-triangle-exclamation fa-2x" style="color: var(--clr-danger);"></i>
+                    </div>
+                    <h2 class="text-headline">Delete Staff Member</h2>
+                    <p class="text-body text-muted">Are you sure you want to delete this staff member? This action cannot be undone.</p>
+                </div>
+
+                <div class="card-stat rounded p-4 mb-4 text-start">
+                    <h4 class="text-subhead mb-3" style="color: var(--clr-primary-500);">@Model.Staff.Name</h4>
+                    <dl class="row mb-0 text-muted">
+                        <dt class="col-sm-4">Role</dt>
+                        <dd class="col-sm-8">
+                            <span class="fw-medium text-capitalize">@Model.Staff.Role</span>
+                        </dd>
+
+                        <dt class="col-sm-4">Username</dt>
+                        <dd class="col-sm-8 text-mono">@Model.Staff.Username</dd>
+
+                        <dt class="col-sm-4">Email</dt>
+                        <dd class="col-sm-8">@Model.Staff.Email</dd>
+                    </dl>
+                </div>
+
+                <form method="post">
+                    <input type="hidden" asp-for="Staff.StaffId" />
+                    <div class="d-flex gap-3 justify-content-center">
+                        <a asp-page="./Index" class="btn btn-outline-secondary px-4"><i class="fa-solid fa-arrow-left me-1"></i> Cancel</a>
+                        <button type="submit" class="btn btn-danger px-4"><i class="fa-solid fa-trash me-1"></i> Delete Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

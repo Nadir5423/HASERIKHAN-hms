@@ -1,0 +1,60 @@
+@page
+@model HMS.Pages.Admin.ProfileModel
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="row mb-4 align-items-end">
+    <div class="col animate-enter delay-100">
+        <h2 class="text-headline mb-0"><i class="fa-solid fa-user-shield me-2" style="color: var(--clr-primary-500);"></i> My Profile</h2>
+        <p class="text-body text-muted mb-0">View your staff information and credentials</p>
+    </div>
+</div>
+
+<div class="row animate-enter delay-200">
+    <div class="col-md-6 mx-auto">
+        <div class="card card-enterprise shadow-sm">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <div class="avatar-initials mx-auto mb-3 shadow-sm" style="width: 80px; height: 80px; font-size: 2.2rem; border-radius: 50%;">
+                        @(Model.Staff.Name.Substring(0, 1).ToUpper())
+                    </div>
+                    <h4 class="text-headline mb-1">@Model.Staff.Name</h4>
+                    <span class="badge-status badge-success text-uppercase fw-medium">
+                        @Model.Staff.Role
+                    </span>
+                </div>
+                
+                <hr class="my-4" />
+                
+                <div class="mb-3">
+                    <label class="text-caption text-uppercase mb-1 d-block">Username</label>
+                    <p class="fw-semibold mb-0" style="color: var(--clr-primary-900);">@Model.Staff.Username</p>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="text-caption text-uppercase mb-1 d-block">Email Address</label>
+                    <p class="fw-semibold mb-0" style="color: var(--clr-primary-900);">@Model.Staff.Email</p>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="text-caption text-uppercase mb-1 d-block">Phone Number</label>
+                    <p class="fw-semibold mb-0" style="color: var(--clr-primary-900);">@(string.IsNullOrEmpty(Model.Staff.Phone) ? "-" : Model.Staff.Phone)</p>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="text-caption text-uppercase mb-1 d-block">Account Created</label>
+                    <p class="fw-semibold mb-0" style="color: var(--clr-primary-900);">
+                        @(Model.Staff.CreatedAt?.ToString("MMMM dd, yyyy") ?? "N/A")
+                    </p>
+                </div>
+                
+                <div class="mt-4 text-center">
+                    <a asp-page="./EditProfile" class="btn btn-outline-secondary w-100 py-2">
+                        <i class="fa-solid fa-user-pen me-2"></i>Edit Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

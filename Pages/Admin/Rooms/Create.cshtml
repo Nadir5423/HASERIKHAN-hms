@@ -1,0 +1,69 @@
+@page
+@model HMS.Pages.Admin.Rooms.CreateModel
+@{
+    ViewData["Title"] = "Add Room";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card card-enterprise shadow-sm animate-enter delay-100">
+            <div class="card-body p-5">
+                <div class="mb-4 pb-3 border-bottom">
+                    <h2 class="text-headline mb-1"><i class="fa-solid fa-door-open me-2" style="color: var(--clr-primary-500);"></i> Add Room</h2>
+                    <p class="text-body text-muted mb-0">Add a new physical room to the hotel registry</p>
+                </div>
+
+                <form method="post">
+                    <div class="row">
+                        <!-- Room Number -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Room.RoomNumber" class="form-label-enterprise">Room Number</label>
+                            <input asp-for="Room.RoomNumber" class="form-control form-control-enterprise" placeholder="e.g. 101, 204" required />
+                            <span asp-validation-for="Room.RoomNumber" class="text-danger font-size-xs"></span>
+                        </div>
+                        <!-- Floor -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Room.Floor" class="form-label-enterprise">Floor</label>
+                            <input asp-for="Room.Floor" class="form-control form-control-enterprise" placeholder="e.g. 1, 2, 3" required />
+                            <span asp-validation-for="Room.Floor" class="text-danger font-size-xs"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Category Id -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Room.CategoryId" class="form-label-enterprise">Room Category</label>
+                            <select asp-for="Room.CategoryId" asp-items="Model.Categories" class="form-select form-control-enterprise" required>
+                                <option value="">-- Select Category --</option>
+                            </select>
+                            <span asp-validation-for="Room.CategoryId" class="text-danger font-size-xs"></span>
+                        </div>
+                        <!-- Status -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Room.Status" class="form-label-enterprise">Initial Status</label>
+                            <select asp-for="Room.Status" class="form-select form-control-enterprise" required>
+                                <option value="Available">Available</option>
+                                <option value="Occupied">Occupied</option>
+                                <option value="Maintenance">Maintenance</option>
+                            </select>
+                            <span asp-validation-for="Room.Status" class="text-danger font-size-xs"></span>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-4">
+                        <label asp-for="Room.Description" class="form-label-enterprise">Description (Optional)</label>
+                        <textarea asp-for="Room.Description" class="form-control form-control-enterprise" rows="3" placeholder="Enter room description..."></textarea>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="d-flex gap-3 justify-content-end mt-4">
+                        <a asp-page="./Index" class="btn btn-outline-secondary px-4"><i class="fa-solid fa-arrow-left me-1"></i> Cancel</a>
+                        <button type="submit" class="btn btn-primary px-4"><i class="fa-solid fa-floppy-disk me-1"></i> Save Room</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

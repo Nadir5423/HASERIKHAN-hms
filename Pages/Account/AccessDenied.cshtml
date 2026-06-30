@@ -1,0 +1,20 @@
+@page
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="row justify-content-center align-items-center min-vh-75 mt-5">
+    <div class="col-md-6 text-center animate-enter delay-100">
+        <div class="card card-enterprise shadow-sm" style="border-top: 4px solid var(--clr-danger);">
+            <div class="card-body p-5">
+                <i class="fa-solid fa-triangle-exclamation fa-4x mb-4" style="color: var(--clr-danger);"></i>
+                <h1 class="mb-3 font-weight-bold" style="color: var(--clr-danger); font-size: 28px;">403 - Access Denied</h1>
+                <p class="text-muted mb-4 fs-5">You do not have permission to access this resource. Please contact your administrator if you believe this is an error.</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a asp-page="/Index" class="btn btn-outline-secondary"><i class="fa-solid fa-house me-2"></i>Go Home</a>
+                    <a href="javascript:history.back()" class="btn btn-primary"><i class="fa-solid fa-arrow-left me-2"></i>Go Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

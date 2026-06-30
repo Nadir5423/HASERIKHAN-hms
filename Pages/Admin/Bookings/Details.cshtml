@@ -1,0 +1,319 @@
+@page "{id:int}"
+@model HMS.Pages.Admin.Bookings.DetailsModel
+@{
+    ViewData["Title"] = "Booking Details";
+}
+
+<style>
+    .stepper-dot {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background-color: var(--clr-slate);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 500;
+        flex-shrink: 0;
+    }
+    .stepper-dot.active {
+        background-color: var(--clr-primary);
+    }
+    .stepper-dot.completed {
+        background-color: var(--clr-success);
+    }
+    .stepper-line {
+        flex: 1;
+        height: 1px;
+        background-color: var(--clr-border);
+        margin: 0 var(--gap);
+    }
+    .stepper-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--p-inner) var(--p-card);
+        background-color: var(--clr-table-header);
+        border-radius: var(--r-md);
+        border: 0.5px solid var(--clr-border);
+    }
+    .stepper-item {
+        display: flex;
+        align-items: center;
+        gap: var(--gap-sm);
+    }
+    .stepper-item span {
+        font-size: 13px;
+        font-weight: 500;
+    }
+</style>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="text-display mb-1">Booking <span class="text-mono font-monospace">@Model.Booking.BookingReference</span></h1>
+        <p class="text-body text-slate mb-0">View booking timeline, guest details, operational info, and billings</p>
+    </div>
+    <a asp-page="./Index" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left"></i> Back to List</a>
+</div>
+
+<!-- Stepper / Timeline -->
+<div class="stepper-container mb-4 animate-enter delay-100">
+    @{
+        var status = Model.Booking.BookingStatus.ToLower();
+        var isPending = status == "pending";
+        var isConfirmed = status == "confirmed";
+        var isCheckedIn = status == "checkedin";
+        var isCheckedOut = status == "checkedout";
+        var isCancelled = status == "cancelled";
+    }
+    @if (isCancelled)
+    {
+        <div class="d-flex align-items-center w-100 justify-content-center text-danger-color gap-2">
+            <i class="fa-solid fa-circle-xmark fa-lg"></i>
+            <span class="fw-medium" style="font-size:15px;">This booking has been Cancelled.</span>
+        </div>
+    }
+    else
+    {
+        <div class="stepper-item">
+            <div class="stepper-dot @(isPending || isConfirmed || isCheckedIn || isCheckedOut ? "completed" : "")">
+                <i class="fa-solid fa-circle-notch"></i>
+            </div>
+            <span class="@(isPending ? "text-primary-color" : "text-slate")">Pending</span>
+        </div>
+        <div class="stepper-line"></div>
+        <div class="stepper-item">
+            <div class="stepper-dot @(isConfirmed || isCheckedIn || isCheckedOut ? "completed" : "")">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <span class="@(isConfirmed ? "text-primary-color" : "text-slate")">Confirmed</span>
+        </div>
+        <div class="stepper-line"></div>
+        <div class="stepper-item">
+            <div class="stepper-dot @(isCheckedIn || isCheckedOut ? "completed" : "")">
+                <i class="fa-solid fa-key"></i>
+            </div>
+            <span class="@(isCheckedIn ? "text-primary-color" : "text-slate")">Checked In</span>
+        </div>
+        <div class="stepper-line"></div>
+        <div class="stepper-item">
+            <div class="stepper-dot @(isCheckedOut ? "completed" : "")">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <span class="@(isCheckedOut ? "text-primary-color" : "text-slate")">Checked Out</span>
+        </div>
+    }
+</div>
+
+<div class="row g-4">
+    <!-- Main Detail Area -->
+    <div class="col-lg-8">
+        <!-- Details Card -->
+        <div class="card card-enterprise mb-4 animate-enter delay-200">
+            <div class="card-header-enterprise">
+                <h2 class="card-title">Booking Information</h2>
+                <span class="badge-status @(status switch {
+                    "pending" => "badge-pending",
+                    "confirmed" => "badge-confirmed",
+                    "checkedin" => "badge-checkedin",
+                    "checkedout" => "badge-checkedout",
+                    "cancelled" => "badge-cancelled",
+                    _ => "badge-pending"
+                })">
+                    @Model.Booking.BookingStatus
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="detail-grid mb-4">
+                    <div class="detail-item">
+                        <label>Check-In Date</label>
+                        <div class="value">@Model.Booking.CheckInDate.ToString("dd MMM yyyy")</div>
+                    </div>
+                    <div class="detail-item">
+                        <label>Check-Out Date</label>
+                        <div class="value">@Model.Booking.CheckOutDate.ToString("dd MMM yyyy")</div>
+                    </div>
+                    <div class="detail-item">
+                        <label>Number of Guests</label>
+                        <div class="value">@Model.Booking.NumberOfGuests Guest(s)</div>
+                    </div>
+                    <div class="detail-item">
+                        <label>Booked On</label>
+                        <div class="value">@(Model.Booking.BookingDate.HasValue ? Model.Booking.BookingDate.Value.ToString("dd MMM yyyy HH:mm") : "N/A")</div>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Booking.SpecialRequests))
+                {
+                    <div class="mb-4">
+                        <label class="form-label-enterprise mb-1">Special Requests</label>
+                        <div class="p-3 bg-linen rounded-8px border-0" style="font-size:14px;">
+                            @Model.Booking.SpecialRequests
+                        </div>
+                    </div>
+                }
+
+                <!-- Services List -->
+                <div class="border-top pt-4">
+                    <h3 class="text-headline mb-3" style="font-size: 16px;"><i class="fa-solid fa-concierge-bell me-2"></i>Extra Services</h3>
+                    
+                    @if (Model.Booking.BookingServices != null && Model.Booking.BookingServices.Any())
+                    {
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            @foreach (var bs in Model.Booking.BookingServices)
+                            {
+                                <div class="badge-status badge-confirmed py-2 px-3 gap-2 align-items-center" style="border-radius:var(--r-md);">
+                                    <i class="fa-solid fa-bell-concierge"></i>
+                                    <span>@bs.Service?.ServiceName - $@bs.Service?.Price.ToString("N2")</span>
+                                    <form method="post" asp-page-handler="RemoveService" asp-route-id="@Model.Booking.BookingId" asp-route-bookingServiceId="@bs.BookingServiceId" class="d-inline mb-0 align-items-center d-flex">
+                                        <button type="submit" class="border-0 bg-transparent p-0 text-danger-color d-inline-flex" onclick="return confirm('Remove @bs.Service?.ServiceName from this booking?');">
+                                            <i class="fa-solid fa-xmark" style="cursor: pointer; font-size:13px;"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-caption mb-3">No services added to this booking yet.</p>
+                    }
+
+                    @if (Model.Booking.BookingStatus != "CheckedOut" && Model.Booking.BookingStatus != "Cancelled")
+                    {
+                        <form method="post" asp-page-handler="AddServices" class="bg-linen p-3 rounded-8px">
+                            <label class="form-label-enterprise mb-2">Available Services to Add</label>
+                            <div class="row g-2 mb-3">
+                                @foreach (var service in Model.AllServices)
+                                {
+                                    <div class="col-sm-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="SelectedServiceIds" value="@service.ServiceId" id="svc_@service.ServiceId" />
+                                            <label class="form-check-label text-body" for="svc_@service.ServiceId">
+                                                @service.ServiceName ($@service.Price.ToString("N2"))
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <button type="submit" class="btn btn-outline-secondary btn-sm" style="height:32px;">Add Selected Services</button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer & Room details -->
+        <div class="row g-4 animate-enter delay-300">
+            <div class="col-md-6">
+                <div class="card card-enterprise h-100">
+                    <div class="card-header-enterprise">
+                        <h2 class="card-title"><i class="fa-solid fa-user me-2 text-primary-color"></i>Guest Details</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="fw-medium text-primary-dark" style="font-size:16px; margin-bottom: 8px;">@Model.Booking.Customer?.Name</div>
+                        <div class="text-body text-slate mb-1"><i class="fa-solid fa-envelope me-2"></i>@Model.Booking.Customer?.Email</div>
+                        <div class="text-body text-slate"><i class="fa-solid fa-phone me-2"></i>@Model.Booking.Customer?.Phone</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card card-enterprise h-100">
+                    <div class="card-header-enterprise">
+                        <h2 class="card-title"><i class="fa-solid fa-bed me-2 text-primary-color"></i>Room Allocated</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <span class="room-number-pill" style="font-size:14px; padding: 4px 12px;">Room @Model.Booking.Room?.RoomNumber</span>
+                        </div>
+                        <div class="text-body text-slate mb-1"><i class="fa-solid fa-tags me-2"></i>@Model.Booking.Room?.Category?.CategoryName</div>
+                        <div class="text-body text-slate"><i class="fa-solid fa-wallet me-2"></i>$@Model.Booking.Room?.Category?.BasePrice.ToString("N2") / night</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions Sidebar -->
+    <div class="col-lg-4 animate-enter delay-400">
+        <div class="card card-enterprise mb-4">
+            <div class="card-header-enterprise">
+                <h2 class="card-title">Billing & Actions</h2>
+            </div>
+            <div class="card-body">
+                <!-- Total Amount Banner -->
+                <div class="booking-total-banner">
+                    <div class="total-label">Total Booking Bill</div>
+                    <div class="total-amount">$@Model.Booking.TotalAmount.ToString("N2")</div>
+                </div>
+
+                @if (isPending)
+                {
+                    <form method="post" asp-page-handler="Confirm" class="mb-2">
+                        <button type="submit" class="btn btn-primary w-100"><i class="fa-solid fa-circle-check"></i> Confirm Reservation</button>
+                    </form>
+                    <form method="post" asp-page-handler="Cancel">
+                        <button type="submit" class="btn btn-danger w-100" onclick="return confirm('Are you sure you want to cancel this booking?');"><i class="fa-solid fa-ban"></i> Cancel Booking</button>
+                    </form>
+                }
+                else if (isConfirmed)
+                {
+                    <form method="post" asp-page-handler="CheckIn" class="mb-2">
+                        <button type="submit" class="btn btn-primary w-100"><i class="fa-solid fa-key"></i> Check-In Guest</button>
+                    </form>
+                    <form method="post" asp-page-handler="Cancel">
+                        <button type="submit" class="btn btn-danger w-100" onclick="return confirm('Are you sure you want to cancel this booking?');"><i class="fa-solid fa-ban"></i> Cancel Booking</button>
+                    </form>
+                }
+                else if (isCheckedIn)
+                {
+                    <form method="post" asp-page-handler="CheckOut">
+                        <div class="bg-linen p-3 rounded-8px mb-3 border">
+                            <h3 class="text-headline mb-3" style="font-size:14px;"><i class="fa-solid fa-credit-card me-2"></i>Payment Details</h3>
+                            <div class="mb-3">
+                                <label class="form-label-enterprise">Payment Method</label>
+                                <select asp-for="PaymentMethod" class="form-select form-control-enterprise">
+                                    <option value="Credit Card">Credit Card</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="Debit Card">Debit Card</option>
+                                    <option value="Bank Transfer">Bank Transfer</option>
+                                </select>
+                            </div>
+                            <div class="mb-1">
+                                <label class="form-label-enterprise">Reference No. (Optional)</label>
+                                <input asp-for="ReferenceNumber" class="form-control form-control-enterprise" placeholder="Txn ID / Ref No" />
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" onclick="return confirm('Complete check-out? This registers the final payment.');"><i class="fa-solid fa-door-closed"></i> Check-Out & Pay</button>
+                    </form>
+                }
+                else
+                {
+                    <div class="text-center py-3 text-slate">
+                        <i class="fa-solid fa-lock fa-2x mb-2 opacity-50"></i>
+                        <p class="mb-0 text-caption">No actions required for completed or cancelled bookings.</p>
+                    </div>
+                }
+
+                @if (Model.Booking.Invoices != null && Model.Booking.Invoices.Any())
+                {
+                    <div class="border-top pt-4 mt-4">
+                        <h3 class="text-headline mb-3" style="font-size: 15px;"><i class="fa-solid fa-file-invoice-dollar me-2 text-primary-color"></i>Issued Invoices</h3>
+                        @foreach (var inv in Model.Booking.Invoices)
+                        {
+                            <div class="p-3 bg-linen rounded-8px border mb-2 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="text-mono fw-medium">@inv.InvoiceNumber</div>
+                                    <div class="text-caption">@inv.IssueDate?.ToString("dd MMM yyyy")</div>
+                                </div>
+                                <div class="fw-medium text-success-color" style="font-size: 15px;">$@inv.TotalAmount.ToString("N2")</div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

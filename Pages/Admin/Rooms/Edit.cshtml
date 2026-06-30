@@ -1,0 +1,184 @@
+@page "{id:int}"
+@model HMS.Pages.Admin.Rooms.EditModel
+@{
+    ViewData["Title"] = "Edit Room";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card card-enterprise shadow-sm animate-enter delay-100">
+            <div class="card-body p-5">
+                <div class="mb-4 pb-3 border-bottom">
+                    <h2 class="text-headline mb-1"><i class="fa-solid fa-pen-to-square me-2" style="color: var(--clr-primary-500);"></i> Edit Room</h2>
+                    <p class="text-body text-muted mb-0">Modify the physical room information</p>
+                </div>
+
+                <form method="post">
+                    <input type="hidden" asp-for="Room.RoomId" />
+
+                    <div class="row">
+                        <!-- Room Number -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Room.RoomNumber" class="form-label-enterprise">Room Number</label>
+                            <input asp-for="Room.RoomNumber" class="form-control form-control-enterprise" required />
+                            <span asp-validation-for="Room.RoomNumber" class="text-danger font-size-xs"></span>
+                        </div>
+                        <!-- Floor -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Room.Floor" class="form-label-enterprise">Floor</label>
+                            <input asp-for="Room.Floor" class="form-control form-control-enterprise" required />
+                            <span asp-validation-for="Room.Floor" class="text-danger font-size-xs"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Category Id -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Room.CategoryId" class="form-label-enterprise">Room Category</label>
+                            <select asp-for="Room.CategoryId" asp-items="Model.Categories" class="form-select form-control-enterprise" required></select>
+                            <span asp-validation-for="Room.CategoryId" class="text-danger font-size-xs"></span>
+                        </div>
+                        <!-- Status -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Room.Status" class="form-label-enterprise">Status</label>
+                            <select asp-for="Room.Status" class="form-select form-control-enterprise" required>
+                                <option value="Available">Available</option>
+                                <option value="Occupied">Occupied</option>
+                                <option value="Maintenance">Maintenance</option>
+                            </select>
+                            <span asp-validation-for="Room.Status" class="text-danger font-size-xs"></span>
+                        </div>
+                    </div>
+
+                    <!-- Customer Allocation Container -->
+                    <div id="customerAllocationContainer" style="display: none;" class="mt-4 p-4 border rounded border-enterprise" style="background-color: var(--clr-bg-alt);">
+                        <h5 class="text-headline mb-3" style="color: var(--clr-primary-500); font-size: 1.1rem;">
+                            <i class="fa-solid fa-user-check me-2"></i> Customer Allocation
+                        </h5>
+
+                        <!-- Radio Selector for Allocation Type -->
+                        <div class="mb-3 d-flex gap-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" asp-for="AllocationType" value="Existing" id="AllocExisting" checked />
+                                <label class="form-check-label text-body fw-bold" for="AllocExisting">
+                                    Existing Customer
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" asp-for="AllocationType" value="New" id="AllocNew" />
+                                <label class="form-check-label text-body fw-bold" for="AllocNew">
+                                    Register New Customer
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Existing Customer Selection -->
+                        <div id="existingCustomerSection" class="mb-3">
+                            <label asp-for="SelectedCustomerId" class="form-label-enterprise">Select Customer</label>
+                            <select asp-for="SelectedCustomerId" asp-items="Model.Customers" class="form-select form-control-enterprise">
+                                <option value="">-- Choose Customer --</option>
+                            </select>
+                            <span asp-validation-for="SelectedCustomerId" class="text-danger font-size-xs"></span>
+                        </div>
+
+                        <!-- New Customer Fields -->
+                        <div id="newCustomerSection" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="CustomerName" class="form-label-enterprise">Full Name</label>
+                                    <input asp-for="CustomerName" class="form-control form-control-enterprise" />
+                                    <span asp-validation-for="CustomerName" class="text-danger font-size-xs"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="CustomerEmail" class="form-label-enterprise">Email Address</label>
+                                    <input asp-for="CustomerEmail" type="email" class="form-control form-control-enterprise" />
+                                    <span asp-validation-for="CustomerEmail" class="text-danger font-size-xs"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="CustomerPhone" class="form-label-enterprise">Phone Number</label>
+                                    <input asp-for="CustomerPhone" class="form-control form-control-enterprise" />
+                                    <span asp-validation-for="CustomerPhone" class="text-danger font-size-xs"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="CustomerAddress" class="form-label-enterprise">Address (Optional)</label>
+                                    <input asp-for="CustomerAddress" class="form-control form-control-enterprise" />
+                                    <span asp-validation-for="CustomerAddress" class="text-danger font-size-xs"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-4 mt-3">
+                        <label asp-for="Room.Description" class="form-label-enterprise">Description (Optional)</label>
+                        <textarea asp-for="Room.Description" class="form-control form-control-enterprise" rows="3"></textarea>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="d-flex gap-3 justify-content-end mt-4">
+                        <a asp-page="./Index" class="btn btn-outline-secondary px-4"><i class="fa-solid fa-arrow-left me-1"></i> Cancel</a>
+                        <button type="submit" class="btn btn-primary px-4"><i class="fa-solid fa-floppy-disk me-1"></i> Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var statusSelect = document.getElementById('Room_Status');
+            var container = document.getElementById('customerAllocationContainer');
+            var existingRadio = document.getElementById('AllocExisting');
+            var newRadio = document.getElementById('AllocNew');
+            var existingSection = document.getElementById('existingCustomerSection');
+            var newSection = document.getElementById('newCustomerSection');
+
+            var selectedCustomerSelect = document.getElementById('SelectedCustomerId');
+            var customerNameInput = document.getElementById('CustomerName');
+            var customerEmailInput = document.getElementById('CustomerEmail');
+            var customerPhoneInput = document.getElementById('CustomerPhone');
+
+            function updateUI() {
+                var isOccupied = statusSelect && statusSelect.value === 'Occupied';
+                if (isOccupied) {
+                    container.style.display = 'block';
+                    if (existingRadio.checked) {
+                        existingSection.style.display = 'block';
+                        newSection.style.display = 'none';
+
+                        selectedCustomerSelect.setAttribute('required', 'required');
+                        customerNameInput.removeAttribute('required');
+                        customerEmailInput.removeAttribute('required');
+                        customerPhoneInput.removeAttribute('required');
+                    } else {
+                        existingSection.style.display = 'none';
+                        newSection.style.display = 'block';
+
+                        selectedCustomerSelect.removeAttribute('required');
+                        customerNameInput.setAttribute('required', 'required');
+                        customerEmailInput.setAttribute('required', 'required');
+                        customerPhoneInput.setAttribute('required', 'required');
+                    }
+                } else {
+                    container.style.display = 'none';
+                    selectedCustomerSelect.removeAttribute('required');
+                    customerNameInput.removeAttribute('required');
+                    customerEmailInput.removeAttribute('required');
+                    customerPhoneInput.removeAttribute('required');
+                }
+            }
+
+            if (statusSelect) statusSelect.addEventListener('change', updateUI);
+            if (existingRadio) existingRadio.addEventListener('change', updateUI);
+            if (newRadio) newRadio.addEventListener('change', updateUI);
+
+            updateUI();
+        });
+    </script>
+}
+

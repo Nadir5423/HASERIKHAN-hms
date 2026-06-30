@@ -1,0 +1,86 @@
+@page "{id:int}"
+@model HMS.Pages.Admin.Staff.EditModel
+@{
+    ViewData["Title"] = "Edit Staff Member";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card card-enterprise shadow-sm animate-enter delay-100">
+            <div class="card-body p-5">
+                <div class="mb-4 pb-3 border-bottom">
+                    <h2 class="text-headline mb-1"><i class="fa-solid fa-user-pen me-2" style="color: var(--clr-primary-500);"></i> Edit Staff Member</h2>
+                    <p class="text-body text-muted mb-0">Update details or change password for @Model.Staff.Name</p>
+                </div>
+
+                <form method="post">
+                    <input type="hidden" asp-for="Staff.StaffId" />
+
+                    <div class="row">
+                        <!-- Name -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Staff.Name" class="form-label-enterprise">Full Name</label>
+                            <input asp-for="Staff.Name" class="form-control form-control-enterprise" required />
+                            <span asp-validation-for="Staff.Name" class="text-danger font-size-xs"></span>
+                        </div>
+                        <!-- Role -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Staff.Role" class="form-label-enterprise">Role</label>
+                            <select asp-for="Staff.Role" class="form-select form-control-enterprise" required>
+                                <option value="">-- Select Role --</option>
+                                <option value="Receptionist">Receptionist</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                            <span asp-validation-for="Staff.Role" class="text-danger font-size-xs"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Email -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Staff.Email" class="form-label-enterprise">Email Address</label>
+                            <input asp-for="Staff.Email" type="email" class="form-control form-control-enterprise" required />
+                            <span asp-validation-for="Staff.Email" class="text-danger font-size-xs"></span>
+                        </div>
+                        <!-- Phone -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Staff.Phone" class="form-label-enterprise">Phone Number</label>
+                            <input asp-for="Staff.Phone" class="form-control form-control-enterprise" />
+                            <span asp-validation-for="Staff.Phone" class="text-danger font-size-xs"></span>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-end">
+                        <!-- Username -->
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Staff.Username" class="form-label-enterprise">Username</label>
+                            <input asp-for="Staff.Username" class="form-control form-control-enterprise" required />
+                            <span asp-validation-for="Staff.Username" class="text-danger font-size-xs"></span>
+                        </div>
+                        <!-- Password -->
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Staff.PasswordHash" class="form-label-enterprise">New Password (Optional)</label>
+                            <input asp-for="Staff.PasswordHash" type="password" class="form-control form-control-enterprise" placeholder="Leave blank to keep current" />
+                            <span asp-validation-for="Staff.PasswordHash" class="text-danger font-size-xs"></span>
+                        </div>
+                        <!-- Is Active -->
+                        <div class="col-md-4 mb-3 pb-2">
+                            <div class="form-check form-switch">
+                                <input asp-for="Staff.IsActive" class="form-check-input" type="checkbox" role="switch" id="activeSwitch">
+                                <label class="form-check-label text-body fw-medium" for="activeSwitch">Account Active</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="d-flex gap-3 justify-content-end mt-4">
+                        <a asp-page="./Index" class="btn btn-outline-secondary px-4"><i class="fa-solid fa-arrow-left me-1"></i> Cancel</a>
+                        <button type="submit" class="btn btn-primary px-4"><i class="fa-solid fa-floppy-disk me-1"></i> Update Staff</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

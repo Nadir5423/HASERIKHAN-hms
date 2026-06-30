@@ -1,0 +1,83 @@
+@page
+@model HMS.Pages.Admin.Staff.IndexModel
+@{
+    ViewData["Title"] = "Staff Management";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="text-headline mb-0"><i class="fa-solid fa-users-gear me-2" style="color: var(--clr-primary-500);"></i> Staff Management</h2>
+        <p class="text-body text-muted mb-0">View and manage staff accounts and roles</p>
+    </div>
+    <a asp-page="./Create" class="btn btn-primary px-3 py-2"><i class="fa-solid fa-user-plus me-1"></i> Add Staff</a>
+</div>
+
+<div class="card card-enterprise shadow-sm animate-enter delay-100">
+    <div class="card-body p-4">
+        @if (Model.StaffMembers.Count == 0)
+        {
+            <div class="text-center py-5 text-muted">
+                <i class="fa-solid fa-inbox fa-3x mb-3 opacity-25"></i>
+                <p class="mb-0">No staff members found.</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table-enterprise">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var staff in Model.StaffMembers)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-initials me-2 shadow-sm">
+                                            @(staff.Name?.Substring(0, 1).ToUpper() ?? "S")
+                                        </div>
+                                        <span class="fw-bold" style="color: var(--clr-primary-900);">@staff.Name</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="fw-medium text-capitalize text-muted">@staff.Role</span>
+                                </td>
+                                <td class="text-mono">@@@staff.Username</td>
+                                <td>@staff.Email</td>
+                                <td class="text-muted">@(string.IsNullOrEmpty(staff.Phone) ? "-" : staff.Phone)</td>
+                                <td>
+                                    @if (staff.IsActive)
+                                    {
+                                        <span class="badge-status badge-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge-status badge-danger">Inactive</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <a asp-page="./Edit" asp-route-id="@staff.StaffId" class="btn btn-outline-secondary py-1 px-3 me-2">
+                                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                                    </a>
+                                    <a asp-page="./Delete" asp-route-id="@staff.StaffId" class="btn btn-danger py-1 px-3">
+                                        <i class="fa-solid fa-trash-can"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+

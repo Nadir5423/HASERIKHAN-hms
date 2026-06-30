@@ -1,0 +1,42 @@
+@* Shared enterprise dialog modal — Grand Azure Design System *@
+@model HMS.Models.ViewModels.DialogModel
+
+<div class="modal fade" id="enterpriseDialog" tabindex="-1" aria-labelledby="enterpriseDialogLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 480px;">
+        <div class="modal-content">
+            <div class="modal-header" style="flex-direction: column; align-items: center;">
+                <div class="modal-icon-circle modal-icon-warning">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <h5 class="modal-title" id="enterpriseDialogLabel">@Model.Title</h5>
+            </div>
+            <div class="modal-body">
+                @Model.Message
+            </div>
+            <div class="modal-footer">
+                @if (Model.ShowCancel)
+                {
+                    <form method="post" asp-page-handler="@Model.Handler" class="w-100 d-flex flex-column" style="gap: 8px;">
+                        <input type="hidden" name="dialogId" value="@Model.DialogId" />
+                        <button type="submit" class="btn btn-danger w-100">@Model.ConfirmButtonText</button>
+                        <button type="button" class="btn btn-ghost w-100" data-bs-dismiss="modal">@Model.CancelButtonText</button>
+                    </form>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-primary w-100" data-bs-dismiss="modal">@Model.ConfirmButtonText</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var modalEl = document.getElementById('enterpriseDialog');
+        if (modalEl) {
+            var modal = new bootstrap.Modal(modalEl);
+            modal.show();
+        }
+    });
+</script>

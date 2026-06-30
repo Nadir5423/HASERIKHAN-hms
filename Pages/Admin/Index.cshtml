@@ -1,0 +1,228 @@
+@page
+@model HMS.Pages.Admin.IndexModel
+@using HMS.Core
+@{
+    ViewData["Title"] = "Dashboard";
+    var checkInsToday = Model.RecentBookings.Where(b => b.CheckInDate.Date == DateTime.Today.Date).ToList();
+    var checkOutsToday = Model.RecentBookings.Where(b => b.CheckOutDate.Date == DateTime.Today.Date).ToList();
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="text-display mb-1">Welcome, @Model.CurrentUserName</h1>
+        <p class="text-body text-slate mb-0">Overview of Grand Azure Hotel status today.</p>
+    </div>
+    <div>
+        <span class="badge-status badge-pending">
+            <i class="fa-solid fa-calendar me-1"></i> @DateTime.Now.ToString("dd MMM yyyy")
+        </span>
+    </div>
+</div>
+
+<!-- KPI Stat Cards -->
+<div class="row g-3 mb-4">
+    <!-- Total Rooms -->
+    <div class="col-md-6 col-xl-3 animate-enter delay-100">
+        <div class="card-stat">
+            <div class="stat-content">
+                <span class="stat-value text-primary-color">@Model.TotalRooms</span>
+                <span class="stat-label">Total Rooms</span>
+            </div>
+            <div class="stat-icon stat-icon-primary">
+                <i class="fa-solid fa-hotel"></i>
+            </div>
+        </div>
+    </div>
+    <!-- Available Rooms -->
+    <div class="col-md-6 col-xl-3 animate-enter delay-200">
+        <div class="card-stat">
+            <div class="stat-content">
+                <span class="stat-value text-success-color">@Model.AvailableRooms</span>
+                <span class="stat-label">Available</span>
+            </div>
+            <div class="stat-icon stat-icon-success">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+        </div>
+    </div>
+    <!-- Occupied Rooms -->
+    <div class="col-md-6 col-xl-3 animate-enter delay-300">
+        <div class="card-stat">
+            <div class="stat-content">
+                <span class="stat-value text-danger-color">@Model.OccupiedRooms</span>
+                <span class="stat-label">Occupied</span>
+            </div>
+            <div class="stat-icon stat-icon-danger">
+                <i class="fa-solid fa-bed"></i>
+            </div>
+        </div>
+    </div>
+    <!-- Revenue -->
+    <div class="col-md-6 col-xl-3 animate-enter delay-400">
+        <div class="card-stat">
+            <div class="stat-content">
+                <span class="stat-value text-success-color">$@Model.TotalRevenue.ToString("N0")</span>
+                <span class="stat-label">Revenue</span>
+            </div>
+            <div class="stat-icon stat-icon-success">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Two Columns: Today's Check-ins & Today's Check-outs -->
+<div class="row g-3 mb-4 animate-enter delay-300">
+    <!-- Check-ins -->
+    <div class="col-lg-6">
+        <div class="card card-enterprise">
+            <div class="card-header-enterprise" style="border-top: 3px solid var(--clr-success); border-radius: var(--r-lg) var(--r-lg) 0 0;">
+                <h2 class="card-title text-success-color"><i class="fa-solid fa-sign-in-alt me-2"></i>Today's Check-ins</h2>
+                <span class="badge-status badge-success">@checkInsToday.Count</span>
+            </div>
+            <div class="card-body p-0">
+                @if (checkInsToday.Count == 0)
+                {
+                    <div class="text-center py-4 text-slate">
+                        <i class="fa-solid fa-user-check fa-2x mb-2 opacity-50"></i>
+                        <p class="mb-0 text-caption">No check-ins scheduled for today.</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table-enterprise">
+                            <thead>
+                                <tr>
+                                    <th>Ref</th>
+                                    <th>Customer</th>
+                                    <th>Room</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var booking in checkInsToday)
+                                {
+                                    <tr>
+                                        <td class="text-mono">@booking.BookingReference</td>
+                                        <td>@booking.Customer?.Name</td>
+                                        <td><span class="room-number-pill">Room @booking.Room?.RoomNumber</span></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Check-outs -->
+    <div class="col-lg-6">
+        <div class="card card-enterprise">
+            <div class="card-header-enterprise" style="border-top: 3px solid var(--clr-warning); border-radius: var(--r-lg) var(--r-lg) 0 0;">
+                <h2 class="card-title text-warning-color"><i class="fa-solid fa-sign-out-alt me-2"></i>Today's Check-outs</h2>
+                <span class="badge-status badge-warning">@checkOutsToday.Count</span>
+            </div>
+            <div class="card-body p-0">
+                @if (checkOutsToday.Count == 0)
+                {
+                    <div class="text-center py-4 text-slate">
+                        <i class="fa-solid fa-user-xmark fa-2x mb-2 opacity-50"></i>
+                        <p class="mb-0 text-caption">No check-outs scheduled for today.</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table-enterprise">
+                            <thead>
+                                <tr>
+                                    <th>Ref</th>
+                                    <th>Customer</th>
+                                    <th>Room</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var booking in checkOutsToday)
+                                {
+                                    <tr>
+                                        <td class="text-mono">@booking.BookingReference</td>
+                                        <td>@booking.Customer?.Name</td>
+                                        <td><span class="room-number-pill">Room @booking.Room?.RoomNumber</span></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Bookings Table -->
+<div class="card card-enterprise animate-enter delay-400">
+    <div class="card-header-enterprise">
+        <h2 class="card-title"><i class="fa-solid fa-clock-rotate-left me-2"></i>Recent Bookings</h2>
+        <a asp-page="/Admin/Bookings/Index" class="btn btn-outline-secondary btn-sm" style="height: 30px; padding: 0 12px; font-size: 12px;">View All</a>
+    </div>
+    <div class="card-body p-0">
+        @if (Model.RecentBookings.Count == 0)
+        {
+            <div class="text-center py-5 text-slate">
+                <i class="fa-solid fa-inbox fa-3x mb-3 opacity-25"></i>
+                <p>No recent bookings recorded.</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table-enterprise">
+                    <thead>
+                        <tr>
+                            <th>Ref</th>
+                            <th>Customer</th>
+                            <th>Room</th>
+                            <th>Dates</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var booking in Model.RecentBookings.Take(5))
+                        {
+                            <tr>
+                                <td class="text-mono">@booking.BookingReference</td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="avatar-initials avatar-initials-sm">
+                                            @(booking.Customer?.Name?.Substring(0, 1).ToUpper() ?? "G")
+                                        </div>
+                                        <span>@booking.Customer?.Name</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="room-number-pill">Room @booking.Room?.RoomNumber</span>
+                                </td>
+                                <td class="text-slate">
+                                    @booking.CheckInDate.ToString("dd MMM") - @booking.CheckOutDate.ToString("dd MMM")
+                                </td>
+                                <td>
+                                    <span class="badge-status @(booking.BookingStatus.ToLower() switch {
+                                        "pending" => "badge-pending",
+                                        "confirmed" => "badge-confirmed",
+                                        "checkedin" => "badge-checkedin",
+                                        "checkedout" => "badge-checkedout",
+                                        "cancelled" => "badge-cancelled",
+                                        _ => "badge-pending"
+                                    })">
+                                        @booking.BookingStatus
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

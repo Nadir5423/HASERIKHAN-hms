@@ -1,0 +1,85 @@
+@page
+@model HMS.Pages.Customer.MyBookingsModel
+@{
+    ViewData["Title"] = "My Bookings";
+}
+
+<div class="row mb-4 mt-2">
+    <div class="col-12 animate-enter delay-100">
+        <h1 class="text-display mb-1">My Bookings</h1>
+        <p class="text-body text-slate mb-0">View, monitor, and manage your upcoming and historical stays at Grand Azure.</p>
+    </div>
+</div>
+
+<div class="row animate-enter delay-200">
+    @if (Model.Bookings.Any())
+    {
+        @foreach (var booking in Model.Bookings)
+        {
+            <div class="col-md-6 col-xl-4 mb-4">
+                <div class="card card-enterprise h-100">
+                    <div class="card-body p-4 d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                            <span class="text-mono">@booking.BookingReference</span>
+                            
+                            <span class="badge-status @(booking.BookingStatus.ToLower() switch {
+                                "pending" => "badge-pending",
+                                "confirmed" => "badge-confirmed",
+                                "checkedin" => "badge-checkedin",
+                                "checkedout" => "badge-checkedout",
+                                _ => "badge-cancelled"
+                            })">
+                                @(booking.BookingStatus == "CheckedOut" ? "Completed" : booking.BookingStatus)
+                            </span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <span class="room-number-pill">Room @booking.Room?.RoomNumber</span>
+                            <div class="text-caption mt-1">@booking.Room?.Category?.CategoryName</div>
+                        </div>
+
+                        <div class="row text-slate mb-4" style="font-size: 13px;">
+                            <div class="col-6">
+                                <div class="text-caption text-uppercase mb-1" style="font-size:10px;">Check-In</div>
+                                <div class="fw-medium text-primary-dark">@booking.CheckInDate.ToString("dd MMM yyyy")</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-caption text-uppercase mb-1" style="font-size:10px;">Check-Out</div>
+                                <div class="fw-medium text-primary-dark">@booking.CheckOutDate.ToString("dd MMM yyyy")</div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-end mt-auto pt-3 border-top">
+                            <div>
+                                <div class="text-caption text-uppercase mb-1" style="font-size:10px;">Amount Paid</div>
+                                <h5 class="fw-medium text-primary-color mb-0" style="font-size: 18px;">$@booking.TotalAmount.ToString("N2")</h5>
+                            </div>
+
+                            @if (booking.BookingStatus == "Pending" || booking.BookingStatus == "Confirmed")
+                            {
+                                <form method="post" asp-page-handler="Cancel" asp-route-id="@booking.BookingId" class="mb-0">
+                                    <button type="submit" class="btn btn-danger btn-sm" style="height:32px;" onclick="return confirm('Are you sure you want to cancel this booking?');">
+                                        <i class="fa-solid fa-ban"></i> Cancel
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="card card-enterprise text-center p-5">
+                <div class="py-4">
+                    <i class="fa-solid fa-suitcase-rolling fa-3x mb-3 text-primary-color opacity-50"></i>
+                    <h3 class="text-headline">No Bookings Yet</h3>
+                    <p class="text-body text-slate mb-4">You haven't made any bookings in our system yet. Ready to plan your next stay?</p>
+                    <a asp-page="./Index" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i> Find a Room</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

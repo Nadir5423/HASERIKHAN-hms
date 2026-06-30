@@ -1,0 +1,62 @@
+@page
+@model HMS.Pages.Admin.RoomCategories.IndexModel
+@{
+    ViewData["Title"] = "Room Categories";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="text-display mb-1">Room Categories</h1>
+        <p class="text-body text-slate mb-0">View and manage hotel room types, maximum occupancies, and base prices</p>
+    </div>
+    <a asp-page="./Create" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Category</a>
+</div>
+
+<div class="card card-enterprise animate-enter delay-100">
+    <div class="card-body p-0">
+        @if (Model.RoomCategories.Count == 0)
+        {
+            <div class="text-center py-5 text-slate">
+                <i class="fa-solid fa-inbox fa-3x mb-3 opacity-25"></i>
+                <p class="mb-0">No categories found. Click 'Add Category' to create one.</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table-enterprise">
+                    <thead>
+                        <tr>
+                            <th>Category Name</th>
+                            <th>Base Price</th>
+                            <th>Max Occupancy</th>
+                            <th>Description</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var category in Model.RoomCategories)
+                        {
+                            <tr>
+                                <td class="fw-medium" style="color: var(--clr-primary-dark);">@category.CategoryName</td>
+                                <td class="fw-medium">$@category.BasePrice.ToString("N2")</td>
+                                <td>@category.MaxOccupancy Guests</td>
+                                <td class="text-slate" style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">@category.Description</td>
+                                <td class="text-end">
+                                    <div class="d-inline-flex gap-2">
+                                        <a asp-page="./Edit" asp-route-id="@category.CategoryId" class="btn-icon-only btn-edit" title="Edit">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </a>
+                                        <a asp-page="./Delete" asp-route-id="@category.CategoryId" class="btn-icon-only btn-delete" title="Delete">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

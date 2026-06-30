@@ -1,0 +1,123 @@
+@page
+@model HMS.Pages.Customer.BookRoomModel
+@{
+    ViewData["Title"] = "Confirm Booking";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="row mb-4 align-items-end">
+            <div class="col animate-enter delay-100">
+                <h2 class="text-headline mb-0"><i class="fa-solid fa-check-circle me-2" style="color: var(--clr-primary-500);"></i> Confirm Your Booking</h2>
+                <p class="text-body text-muted mb-0">Please review your reservation details below</p>
+            </div>
+        </div>
+
+        <div class="card card-enterprise shadow-sm animate-enter delay-200">
+            <div class="card-body p-4">
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-4 mb-md-0">
+                        <h4 class="text-subhead mb-3" style="color: var(--clr-primary-900);">Stay Details</h4>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <label>Check-In</label>
+                                <div class="value">@Model.CheckIn.ToString("dd MMM yyyy")</div>
+                            </div>
+                            <div class="detail-item">
+                                <label>Check-Out</label>
+                                <div class="value">@Model.CheckOut.ToString("dd MMM yyyy")</div>
+                            </div>
+                            <div class="detail-item">
+                                <label>Duration</label>
+                                <div class="value">@Model.Nights Night(s)</div>
+                            </div>
+                            <div class="detail-item">
+                                <label>Guests</label>
+                                <div class="value">@Model.Guests</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 border-start border-light-subtle">
+                        <h4 class="text-subhead mb-3" style="color: var(--clr-primary-900);">Room Summary</h4>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <label>Room Number</label>
+                                <div class="value text-mono">@Model.Room.RoomNumber</div>
+                            </div>
+                            <div class="detail-item">
+                                <label>Room Type</label>
+                                <div class="value">
+                                    <span class="badge-status badge-success">
+                                        @Model.Room.Category?.CategoryName
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <label>Nightly Rate</label>
+                                <div class="value">$@Model.Room.Category?.BasePrice.ToString("0.00")</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="booking-total-banner">
+                    <div class="total-label">Total Amount Due at Hotel</div>
+                    <div class="total-amount">$@Model.TotalAmount.ToString("0.00")</div>
+                </div>
+
+                <form method="post">
+                    <input type="hidden" asp-for="RoomId" />
+                    <input type="hidden" asp-for="CheckIn" />
+                    <input type="hidden" asp-for="CheckOut" />
+                    <input type="hidden" asp-for="Guests" />
+
+                    <div class="mb-4">
+                        <label class="form-label-enterprise">Additional Services</label>
+                        <div class="row g-2">
+                            @foreach (var service in Model.Services)
+                            {
+                                <div class="col-12 col-sm-6 col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input service-cb" type="checkbox" name="SelectedServiceIds" value="@service.ServiceId" id="service_@service.ServiceId" data-price="@service.Price" />
+                                        <label class="form-check-label" for="service_@service.ServiceId">
+                                            @service.ServiceName (@service.Price.ToString("C"))
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 justify-content-end">
+                        <a asp-page="./Index" class="btn btn-outline-secondary px-4"><i class="fa-solid fa-arrow-left me-1"></i> Back to Search</a>
+                        <button type="submit" class="btn btn-primary px-5 fw-bold"><i class="fa-solid fa-lock me-2"></i> Confirm Booking</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.service-cb');
+            const totalAmountEl = document.querySelector('.total-amount');
+            const basePrice = @Model.TotalAmount;
+
+            function updateTotal() {
+                let total = basePrice;
+                checkboxes.forEach(cb => {
+                    if (cb.checked) {
+                        total += parseFloat(cb.getAttribute('data-price') || 0);
+                    }
+                });
+                totalAmountEl.textContent = '$' + total.toFixed(2);
+            }
+
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', updateTotal);
+            });
+        });
+    </script>
+}
+

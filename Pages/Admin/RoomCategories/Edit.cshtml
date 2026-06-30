@@ -1,0 +1,57 @@
+@page "{id:int}"
+@model HMS.Pages.Admin.RoomCategories.EditModel
+@{
+    ViewData["Title"] = "Edit Category";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card card-enterprise shadow-sm animate-enter delay-100">
+            <div class="card-body p-5">
+                <div class="mb-4 pb-3 border-bottom">
+                    <h2 class="text-headline mb-1"><i class="fa-solid fa-pen-to-square me-2" style="color: var(--clr-primary-500);"></i> Edit Room Category</h2>
+                    <p class="text-body text-muted mb-0">Modify the category details</p>
+                </div>
+
+                <form method="post">
+                    <input type="hidden" asp-for="Category.CategoryId" />
+
+                    <!-- Category Name -->
+                    <div class="mb-3">
+                        <label asp-for="Category.CategoryName" class="form-label-enterprise">Category Name</label>
+                        <input asp-for="Category.CategoryName" class="form-control form-control-enterprise" required />
+                        <span asp-validation-for="Category.CategoryName" class="text-danger font-size-xs"></span>
+                    </div>
+
+                    <div class="row">
+                        <!-- Base Price -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Category.BasePrice" class="form-label-enterprise">Base Price ($)</label>
+                            <input asp-for="Category.BasePrice" type="number" step="0.01" class="form-control form-control-enterprise" required />
+                            <span asp-validation-for="Category.BasePrice" class="text-danger font-size-xs"></span>
+                        </div>
+                        <!-- Max Occupancy -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Category.MaxOccupancy" class="form-label-enterprise">Max Occupancy (Guests)</label>
+                            <input asp-for="Category.MaxOccupancy" type="number" min="1" class="form-control form-control-enterprise" required />
+                            <span asp-validation-for="Category.MaxOccupancy" class="text-danger font-size-xs"></span>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-4">
+                        <label asp-for="Category.Description" class="form-label-enterprise">Description (Optional)</label>
+                        <textarea asp-for="Category.Description" class="form-control form-control-enterprise" rows="3"></textarea>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="d-flex gap-3 justify-content-end mt-4">
+                        <a asp-page="./Index" class="btn btn-outline-secondary px-4"><i class="fa-solid fa-arrow-left me-1"></i> Cancel</a>
+                        <button type="submit" class="btn btn-primary px-4"><i class="fa-solid fa-floppy-disk me-1"></i> Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

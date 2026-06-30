@@ -1,0 +1,104 @@
+@page
+@model HMS.Pages.Customer.IndexModel
+@{
+    ViewData["Title"] = "Find a Room";
+}
+
+<div class="row mb-4 mt-2">
+    <div class="col-12 text-center animate-enter delay-100">
+        <h1 class="text-display mb-2">Find Your Perfect Stay</h1>
+        <p class="text-body text-slate mb-0">Search our selection of premium rooms and book your next luxury getaway.</p>
+    </div>
+</div>
+
+<!-- Search Form Card -->
+<div class="card card-enterprise animate-enter delay-200 mb-4">
+    <div class="card-body p-4">
+        <form method="get">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label asp-for="CheckInDate" class="form-label-enterprise">Check-In</label>
+                    <input asp-for="CheckInDate" type="date" class="form-control form-control-enterprise" required />
+                    <span asp-validation-for="CheckInDate" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="CheckOutDate" class="form-label-enterprise">Check-Out</label>
+                    <input asp-for="CheckOutDate" type="date" class="form-control form-control-enterprise" required />
+                    <span asp-validation-for="CheckOutDate" class="text-danger"></span>
+                </div>
+                <div class="col-md-2">
+                    <label asp-for="Guests" class="form-label-enterprise">Guests</label>
+                    <input asp-for="Guests" type="number" min="1" class="form-control form-control-enterprise" required />
+                    <span asp-validation-for="Guests" class="text-danger"></span>
+                </div>
+                <div class="col-md-2">
+                    <label asp-for="CategoryId" class="form-label-enterprise">Room Type</label>
+                    <select asp-for="CategoryId" asp-items="Model.Categories" class="form-select form-control-enterprise">
+                        <option value="">Any Type</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100" style="height: 40px;">
+                        <i class="fa-solid fa-magnifying-glass"></i> Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Search Results -->
+@if (Model.HasSearched)
+{
+    @if (Model.AvailableRooms.Any())
+    {
+        <h2 class="text-headline mb-3 animate-enter delay-300"><i class="fa-solid fa-hotel me-2"></i>Available Rooms</h2>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 animate-enter delay-300">
+            @foreach (var room in Model.AvailableRooms)
+            {
+                <div class="col">
+                    <div class="card card-enterprise h-100">
+                        <div class="card-body p-4 d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h4 class="fw-medium text-primary-dark mb-1" style="font-size: 18px;">Room @room.RoomNumber</h4>
+                                    <span class="text-caption fw-medium text-primary-color">@room.Category?.CategoryName</span>
+                                </div>
+                                <div class="text-end">
+                                    <h5 class="fw-medium text-primary-color mb-0" style="font-size: 18px;">$@room.Category?.BasePrice.ToString("N2")</h5>
+                                    <span class="text-caption">/ night</span>
+                                </div>
+                            </div>
+                            
+                            <p class="text-body text-slate flex-grow-1 mb-3" style="font-size: 13.5px; line-height: 1.5;">@room.Category?.Description</p>
+                            
+                            <div class="d-flex align-items-center mb-3 text-slate" style="font-size: 12px; gap: 16px;">
+                                <span><i class="fa-solid fa-user-group text-primary-color me-1"></i>Max @room.Category?.MaxOccupancy guests</span>
+                                <span><i class="fa-solid fa-layer-group text-primary-color me-1"></i>Floor @room.Floor</span>
+                            </div>
+
+                            <a asp-page="./BookRoom" 
+                               asp-route-roomId="@room.RoomId" 
+                               asp-route-checkIn="@Model.CheckInDate.ToString("yyyy-MM-dd")" 
+                               asp-route-checkOut="@Model.CheckOutDate.ToString("yyyy-MM-dd")" 
+                               asp-route-guests="@Model.Guests"
+                               class="btn btn-primary w-100 mt-auto">
+                                Book Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="card card-enterprise text-center p-5 animate-enter delay-300">
+            <div class="py-4">
+                <i class="fa-solid fa-bed-pulse fa-3x mb-3 text-primary-color opacity-50"></i>
+                <h3 class="text-headline">No Rooms Available</h3>
+                <p class="text-body text-slate mb-0">We couldn't find any vacant rooms matching your search parameters. Try adjusting your dates or filter options.</p>
+            </div>
+        </div>
+    }
+}
